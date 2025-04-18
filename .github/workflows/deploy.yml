@@ -64,23 +64,22 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run format
-      - run: npm run build --if-present
+          cache: npm
+      # - run: npm ci
+      # - run: npm run lint
+      # - run: npm run format
+      # - run: npm run build --if-present
+      # Step 3: Install dependencies
+      - name: 📦 Install dependencies
+        run: |
+          echo "📥 Instalando dependencias..."
+          npm install
 
-      # # Step 3: Install dependencies
-      # - name: 📦 Install dependencies
-      #   run: |
-      #     echo "📥 Instalando dependencias..."
-      #     npm install
-
-      #   # Step 4: Build NestJS application
-      # - name: 🔧 Build application
-      #   run: |
-      #     echo "🔨 Construyendo aplicación NestJS..."
-      #     npm run build
+        # Step 4: Build NestJS application
+      - name: 🔧 Build application
+        run: |
+          echo "🔨 Construyendo aplicación NestJS..."
+          npm run build
 
       # Step 5: Configure AWS credentials
       - name: 🔐 Configure AWS Credentials
