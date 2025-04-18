@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+        - name: user-service-container
+          image: 222634373780.dkr.ecr.us-east-1.amazonaws.com/user-service:v1
+          ports:
+            - containerPort: 5000
+          resources:
+            requests:
+              memory: "1Gi" # Reducido de 3Gi a 1Gi
+              cpu: "500m" # Reducido de 750m a 500m
+            limits:
+              memory: "2Gi" # Reducido de 4Gi a 2Gi
+              cpu: "1" # Mantenido en 1 vCPU
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+spec:
+  selector:
+    app: user-service
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+  type: LoadBalancer
