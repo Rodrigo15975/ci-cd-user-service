@@ -70,19 +70,19 @@ jobs:
       - run: npm run lint
       - run: npm run format
 
-      # Step 3: Install dependencies
-      - name: 📦 Install dependencies
-        run: |
-          echo "📥 Instalando dependencias..."
-          npm install
+      # # Step 3: Install dependencies
+      # - name: 📦 Install dependencies
+      #   run: |
+      #     echo "📥 Instalando dependencias..."
+      #     npm install
 
-        # Step 4: Build NestJS application
-      - name: 🔧 Build application
-        run: |
-          echo "🔨 Construyendo aplicación NestJS..."
-          npm run build
+      #   # Step 4: Build NestJS application
+      # - name: 🔧 Build application
+      #   run: |
+      #     echo "🔨 Construyendo aplicación NestJS..."
+      #     npm run build
 
-        # Step 5: Configure AWS credentials
+      # Step 5: Configure AWS credentials
       - name: 🔐 Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
