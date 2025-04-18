@@ -1,35 +1,40 @@
-# Etapa de desarrollo
-FROM node:22-alpine AS development
+###################
+# BUILD FOR LOCAL DEVELOPMENT
+###################
 
+FROM node:20-alpine As development
 WORKDIR /usr/src/app
+RUN apk add --no-cache openssl
+COPY --chown=node:node package*.json ./
+RUN npm ci
+COPY --chown=node:node . .
+RUN npx prisma generate
+USER node
 
-COPY package*.json ./
+###################
+# BUILD FOR PRODUCTION
+###################
 
-RUN npm install
-
-COPY . .
+FROM node:20-alpine As build
+WORKDIR /usr/src/app
+RUN apk add --no-cache openssl
+COPY --chown=node:node package*.json ./
+COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modules
+COPY --chown=node:node . .
 
 RUN npm run build
-RUN npx prisma generate
-
-
-# Etapa de producción
-FROM node:22-alpine AS production
-
 ENV NODE_ENV=production
+RUN npm ci --omit=dev && npm cache clean --force
 
-WORKDIR /usr/src/app
+USER node
 
-COPY package*.json ./
+###################
+# PRODUCTION
+###################
 
-RUN npm install --omit=dev
-
-COPY . .
-
-COPY --from=development /usr/src/app/dist ./dist
-COPY --from=development /usr/src/app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=development /usr/src/app/node_modules/@prisma ./node_modules/@prisma
-
-CMD ["npm", "run", "start:prod"]
-
-EXPOSE 4000
+FROM node:20-alpine As production
+RUN apk add --no-cache openssl
+COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
+COPY --chown=node:node --from=build /usr/src/app/dist ./dist
+COPY --chown=node:node --from=build /usr/src/app/package.json ./package.json
+CMD ["npm","run", "start:prod"]
