@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: user-service-container
-          image: 222634373780.dkr.ecr.us-east-1.amazonaws.com/user-service:v1
+          image: 222634373780.dkr.ecr.us-east-1.amazonaws.com/user-service
           ports:
             - containerPort: 5000
           resources:
