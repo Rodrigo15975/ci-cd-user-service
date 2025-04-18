@@ -13,8 +13,11 @@ export class AppService {
     exchange: 'user-exchange',
     routingKey: 'user.created',
   })
-  async getHello(data: Record<string, unknown>) {
-    throw new Error('Fallando')
+  async getHello(data: Record<string, string>) {
+    Logger.debug({
+      message: 'oki oki ',
+      data,
+    })
     const user = await this.prismaService.user.create({
       data: {
         email: 'Rodrigo@gmail.com',
@@ -23,13 +26,14 @@ export class AppService {
     })
     Logger.debug('Msg received from API Gateway')
     Logger.debug({
+      user,
       data,
     })
-    await this.amqpConnection.publish('task-exchange', 'task.created', {
-      message: 'From user-service',
-      data: {
-        user,
-      },
-    })
+    // await this.amqpConnection.publish('task-exchange', 'task.created', {
+    //   message: 'From user-service',
+    //   data: {
+    //     user,
+    //   },
+    // })
   }
 }

@@ -10,6 +10,10 @@ COPY . .
 
 RUN npm run build
 
+RUN npx prisma generate
+
+
+
 FROM node:22-alpine AS production
 
 ENV NODE_ENV=production
