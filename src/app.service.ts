@@ -16,6 +16,7 @@ export class AppService {
   async getHello(data: Record<string, string>) {
     Logger.debug({
       message: 'oki oki ',
+      test: 1,
       data,
     })
     const user = await this.prismaService.user.create({
