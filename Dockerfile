@@ -34,6 +34,9 @@ COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/app/dist ./dist
 COPY --chown=node:node --from=build /usr/src/app/package.json ./package.json
 COPY --chown=node:node --from=build /usr/src/app/prisma ./prisma
+# 🆕 ✅ Copia el cliente Prisma generado
+COPY --chown=node:node --from=build /usr/src/app/prisma/generated ./prisma/generated
+
 
 # 👇 Prisma needs to generate client here too
 RUN npx prisma generate
