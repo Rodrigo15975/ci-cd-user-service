@@ -15,12 +15,8 @@ export class AppService {
   })
   async getHello(data: Record<string, string>) {
     const many = await this.prismaService.user.findMany({
-      where: {
-        email: {
-          contains: 'email',
-          mode: 'insensitive',
-          in: ['email1', 'email2'],
-        },
+      orderBy: {
+        email: 'desc',
       },
     })
     Logger.debug({
