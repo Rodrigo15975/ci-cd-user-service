@@ -14,6 +14,15 @@ export class AppService {
     routingKey: 'user.created',
   })
   async getHello(data: Record<string, string>) {
+    await this.prismaService.user.findMany({
+      where: {
+        email: {
+          contains: 'email',
+          mode: 'insensitive',
+          in: ['email1', 'email2'],
+        },
+      },
+    })
     Logger.debug({
       message: 'oki oki ',
       test: 1,
@@ -30,11 +39,11 @@ export class AppService {
       user,
       data,
     })
-    // await this.amqpConnection.publish('task-exchange', 'task.created', {
-    //   message: 'From user-service',
-    //   data: {
-    //     user,
-    //   },
-    // })
+    await this.amqpConnection.publish('task-exchange', 'task.created', {
+      message: 'From user-service',
+      data: {
+        user_id: user.id,
+      },
+    })
   }
 }
