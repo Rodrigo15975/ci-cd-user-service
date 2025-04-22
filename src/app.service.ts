@@ -14,7 +14,7 @@ export class AppService {
     routingKey: 'user.created',
   })
   async getHello(data: Record<string, string>) {
-    await this.prismaService.user.findMany({
+    const many = await this.prismaService.user.findMany({
       where: {
         email: {
           contains: 'email',
@@ -24,6 +24,7 @@ export class AppService {
       },
     })
     Logger.debug({
+      many,
       message: 'oki oki ',
       test: 1,
       data,
